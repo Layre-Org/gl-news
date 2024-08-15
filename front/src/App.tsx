@@ -5,7 +5,11 @@ function App() {
   return (
     <main className="bg-background h-screen">
       <Header />
-      <Outlet />
+      <section className="flex justify-center">
+        <div className="w-full max-w-5xl">
+          <Outlet />
+        </div>
+      </section>
     </main>
   );
 }
