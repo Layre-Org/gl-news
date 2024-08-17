@@ -1,4 +1,5 @@
-import { Button } from "./ui/button";
+import LoginDialog from "./login-dialog";
+import RegisterDialog from "./register-dialog";
 import { Input } from "./ui/input";
 
 function Header() {
@@ -8,10 +9,8 @@ function Header() {
         <h1 className="font-bold uppercase text-xl">GL News</h1>
         <Input type="text" placeholder="Search..." className="w-auto" />
         <div className="flex gap-4">
-          <Button variant="outline" className="font-semibold">
-            Register
-          </Button>
-          <Button className="font-semibold">Login</Button>
+          <RegisterDialog />
+          <LoginDialog />
         </div>
       </nav>
     </header>
