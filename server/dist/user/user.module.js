@@ -13,7 +13,16 @@ const user_service_1 = require("./user.service");
 const mongoose_1 = require("@nestjs/mongoose");
 const user_schema_1 = require("./models/user.schema");
 const bcrypt_1 = require("bcrypt");
+const id_middleware_1 = require("../middlewares/id.middleware");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
 let UserModule = class UserModule {
+    configure(consumer) {
+        consumer.apply(id_middleware_1.IdMiddleware).forRoutes('user/:id', 'user/news/:id');
+        consumer
+            .apply(auth_middleware_1.AuthMiddleware)
+            .exclude({ path: 'user', method: common_1.RequestMethod.POST })
+            .forRoutes('user', 'user/:id', 'user/news/:id');
+    }
 };
 exports.UserModule = UserModule;
 exports.UserModule = UserModule = __decorate([

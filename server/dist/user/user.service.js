@@ -24,6 +24,9 @@ let UserService = class UserService {
     findOne(_id) {
         return this.userModel.findOne({ _id });
     }
+    findForAuth(email) {
+        return this.userModel.findOne({ email }).select('+password');
+    }
     async create(body) {
         try {
             const user = (await this.userModel.create(body)).toObject();

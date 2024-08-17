@@ -1,9 +1,16 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './models/user.schema';
 import { hash } from 'bcrypt';
+import { IdMiddleware } from 'src/middlewares/id.middleware';
+import { AuthMiddleware } from 'src/middlewares/auth.middleware';
 
 @Module({
   imports: [
@@ -32,4 +39,12 @@ import { hash } from 'bcrypt';
   providers: [UserService],
   exports: [UserService],
 })
-export class UserModule {}
+export class UserModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(IdMiddleware).forRoutes('user/:id', 'user/news/:id');
+    consumer
+      .apply(AuthMiddleware)
+      .exclude({ path: 'user', method: RequestMethod.POST })
+      .forRoutes('user', 'user/:id', 'user/news/:id');
+  }
+}

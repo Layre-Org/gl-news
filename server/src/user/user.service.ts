@@ -19,6 +19,10 @@ export class UserService {
     return this.userModel.findOne({ _id });
   }
 
+  findForAuth(email: string) {
+    return this.userModel.findOne({ email }).select('+password');
+  }
+
   async create(body: CreateUserDto) {
     try {
       const user: { password: string } = (

@@ -9,6 +9,11 @@ export declare class UserService {
     }, import("mongoose").Document<unknown, {}, User> & User & {
         _id: Types.ObjectId;
     }, {}, User, "findOne", {}>;
+    findForAuth(email: string): import("mongoose").Query<import("mongoose").Document<unknown, {}, User> & User & {
+        _id: Types.ObjectId;
+    }, import("mongoose").Document<unknown, {}, User> & User & {
+        _id: Types.ObjectId;
+    }, {}, User, "findOne", {}>;
     create(body: CreateUserDto): Promise<{
         password: string;
     }>;
