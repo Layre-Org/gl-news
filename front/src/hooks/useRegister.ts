@@ -1,15 +1,21 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createUser } from "@/services/user-service";
 
 const registerSchema = z.object({
-  username: z.string().min(3).max(24),
-  email: z.string().email(),
-  password: z.string().min(8).max(24),
-  avatar: z.string().optional(),
+  username: z.string().trim().min(3).max(24),
+  email: z.string().trim().email(),
+  password: z.string().trim().min(8).max(24),
+  avatar: z
+    .string()
+    .trim()
+    .optional()
+    .nullable()
+    .transform((val) => (val === "" ? null : val)),
 });
 
-type RegisterSchema = z.infer<typeof registerSchema>;
+export type RegisterSchema = z.infer<typeof registerSchema>;
 
 export const useRegister = () => {
   const {
@@ -21,7 +27,7 @@ export const useRegister = () => {
   });
 
   const onSubmit = (data: RegisterSchema) => {
-    console.log(data);
+    createUser(data);
   };
 
   return {

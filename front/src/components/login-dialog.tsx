@@ -13,8 +13,7 @@ import { Label } from "./ui/label";
 import { useLogin } from "@/hooks/useLogin";
 
 function LoginDialog() {
-  const { register, errors, onSubmit } = useLogin();
-  console.log(errors);
+  const { register, onSubmit } = useLogin();
 
   return (
     <Dialog>

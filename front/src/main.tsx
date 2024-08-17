@@ -5,6 +5,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/home.tsx";
 import App from "./App.tsx";
 import NewsPage from "./pages/news.tsx";
+import { AuthProvider } from "./context/AuthContext/index.tsx";
+import Profile from "./pages/profile.tsx";
 
 const router = createBrowserRouter([
   {
@@ -19,12 +21,18 @@ const router = createBrowserRouter([
         path: "/news",
         element: <NewsPage />,
       },
+      {
+        path: "/profile",
+        element: <Profile />,
+      },
     ],
   },
 ]);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>
 );
