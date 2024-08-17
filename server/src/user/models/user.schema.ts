@@ -20,6 +20,9 @@ export class User {
   @Prop({ default: false })
   isWriter: boolean;
 
+  @Prop({ default: false })
+  isAdmin: boolean;
+
   @Prop({ default: Date.now })
   register_date: Date;
 }

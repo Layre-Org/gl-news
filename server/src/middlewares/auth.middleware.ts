@@ -46,6 +46,7 @@ export class AuthMiddleware implements NestMiddleware {
 
       req['userId'] = user._id;
       req['isWriter'] = user.isWriter;
+      req['isAdmin'] = user.isAdmin;
 
       next();
     });
