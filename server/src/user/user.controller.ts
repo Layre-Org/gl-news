@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
   Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Types } from 'mongoose';
@@ -26,7 +27,11 @@ export class UserController {
   }
 
   @Get(':id')
-  async getUser(@Param('id') id: string | Types.ObjectId) {
+  async getUser(@Param('id') id: string | Types.ObjectId, @Req() req: Request) {
+    if (!req['isAdmin']) {
+      throw new UnauthorizedException();
+    }
+
     return await this.userService.findOne(id);
   }
 
