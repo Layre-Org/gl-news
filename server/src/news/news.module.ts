@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import { Module } from '@nestjs/common';
-import { NewsController } from './news.controller';
-import { NewsService } from './news.service';
-
-@Module({
-  controllers: [NewsController],
-  providers: [NewsService],
-})
-export class NewsModule {}
-=======
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { NewsController } from './news.controller';
 import { NewsService } from './news.service';
@@ -32,4 +21,3 @@ export class NewsModule implements NestModule {
     consumer.apply(AuthMiddleware).forRoutes('news', 'news/:id');
   }
 }
->>>>>>> back

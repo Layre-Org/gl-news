@@ -9,14 +9,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.News = void 0;
+exports.NewsSchema = exports.News = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
+const mongoose_2 = require("mongoose");
 const user_schema_1 = require("../../user/models/user.schema");
 let News = class News {
 };
 exports.News = News;
 __decorate([
-    (0, mongoose_1.Prop)({ required: true, ref: 'User' }),
+    (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: 'User', unique: false }),
     __metadata("design:type", user_schema_1.User)
 ], News.prototype, "author", void 0);
 __decorate([
@@ -32,18 +33,19 @@ __decorate([
     __metadata("design:type", String)
 ], News.prototype, "content", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ default: 'none' }),
     __metadata("design:type", String)
 ], News.prototype, "image", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ default: Date.now() }),
     __metadata("design:type", Date)
 ], News.prototype, "create_date", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ default: Date.now() }),
     __metadata("design:type", Date)
 ], News.prototype, "last_edited", void 0);
 exports.News = News = __decorate([
     (0, mongoose_1.Schema)()
 ], News);
+exports.NewsSchema = mongoose_1.SchemaFactory.createForClass(News);
 //# sourceMappingURL=news.schema.js.map
