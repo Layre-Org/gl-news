@@ -7,6 +7,8 @@ import {
   Patch,
   Delete,
   Req,
+  UnauthorizedException,
+  BadRequestException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Types } from 'mongoose';
@@ -26,7 +28,11 @@ export class UserController {
   }
 
   @Get(':id')
-  async getUser(@Param('id') id: string | Types.ObjectId) {
+  async getUser(@Param('id') id: string | Types.ObjectId, @Req() req: Request) {
+    if (!req['isAdmin']) {
+      throw new UnauthorizedException();
+    }
+
     return await this.userService.findOne(id);
   }
 
@@ -44,12 +50,74 @@ export class UserController {
   async updateUser(
     @Param('id') id: Types.ObjectId | string,
     @Body() body: UpdateUserDto,
+    @Req() req: Request,
   ) {
-    return await this.userService.update(id, body);
-  }
+    const user = this.userService.findOne(id);
+
+    if (!user) {
+      throw new BadRequestException(
+        "Couldn't find a document with the ID providen",
+      );
+    }
+
+    const userId: Types.ObjectId = (await user)._id;
+
+    if (!userId) {
+      throw new UnauthorizedException(
+        "Couldn't verify the author's permission, try again",
+      );
+    }
+
+    if (
+      req['userId'].toString() !== userId.toString() &&
+      req['isAdmin'] === false
+    ) {
+      throw new UnauthorizedException(
+        'User must be the user or an admin to delete the document',
+      );
+    }
+
+    const doc = await this.userService.update(id, body);
+    return {
+      message: 'Data updated successfully',
+      doc,
+    };
+  } // Fix Email uniqueness updating
 
   @Delete(':id')
-  async deleteUser(@Param('id') id: Types.ObjectId | string) {
-    return await this.userService.remove(id);
+  async deleteUser(
+    @Param('id') id: Types.ObjectId | string,
+    @Req() req: Request,
+  ) {
+    const user = this.userService.findOne(id);
+
+    if (!user) {
+      throw new BadRequestException(
+        "Couldn't find a document with the ID providen",
+      );
+    }
+
+    const userId: Types.ObjectId = (await user)._id;
+
+    if (!userId) {
+      throw new UnauthorizedException(
+        "Couldn't verify the author's permission, try again",
+      );
+    }
+
+    if (
+      req['userId'].toString() !== userId.toString() &&
+      req['isAdmin'] === false
+    ) {
+      throw new UnauthorizedException(
+        'User must be the user or an admin to delete the document',
+      );
+    }
+
+    const doc = await this.userService.remove(id);
+    return {
+      message: 'Data deleted successfully',
+      doc,
+    };
   }
 }
