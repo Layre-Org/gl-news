@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { NewsController } from './news.controller';
 import { NewsService } from './news.service';
 import { News, NewsSchema } from './models/news.schema';
@@ -17,7 +22,15 @@ import { UserModule } from 'src/user/user.module';
 })
 export class NewsModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(IdMiddleware).forRoutes('news/:id');
-    consumer.apply(AuthMiddleware).forRoutes('news', 'news/:id');
+    consumer
+      .apply(IdMiddleware)
+      .forRoutes(
+        { path: 'news/:id', method: RequestMethod.PATCH },
+        { path: 'news/:id', method: RequestMethod.DELETE },
+        'news/user/:id',
+      );
+    consumer
+      .apply(AuthMiddleware)
+      .forRoutes('news', 'news/:id', 'news/get/:id', 'news/user/:id');
   }
 }

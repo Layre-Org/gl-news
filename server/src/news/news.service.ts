@@ -11,9 +11,10 @@ export class NewsService {
     @InjectModel(News.name) private readonly newsModel: Model<News>,
   ) {}
 
-  find(limit?: number, offset?: number) {
+  find(limit: number, offset: number, fromUser?: Types.ObjectId) {
+    const query = fromUser ? { author: fromUser } : null;
     return this.newsModel
-      .find()
+      .find(query)
       .sort({ _id: -1 })
       .skip(offset)
       .limit(limit)

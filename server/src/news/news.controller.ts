@@ -27,6 +27,8 @@ export class NewsController {
     @Query('offset') offset: number | any,
   ) {
     try {
+      limit = limit ? limit : 5;
+      offset = offset ? offset : 0;
       if (limit) {
         limit = parseInt(limit);
       }
@@ -40,8 +42,33 @@ export class NewsController {
     return await this.newsService.find(limit, offset);
   }
 
+  @Get('user/:id')
+  async findFromUser(
+    @Param('id') id: Types.ObjectId,
+    @Query('limit') limit: number | any,
+    @Query('offset') offset: number | any,
+  ) {
+    try {
+      limit = limit ? limit : 5;
+      offset = offset ? offset : 0;
+      if (limit) {
+        limit = parseInt(limit);
+      }
+      if (offset) {
+        offset = parseInt(offset);
+      }
+    } catch (err) {
+      throw new BadRequestException('Limit and Offset must be valid integers');
+    }
+
+    return this.newsService.find(limit, offset, id);
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: Types.ObjectId) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Id not valid');
+    }
     return this.newsService.findOne(id);
   }
 
