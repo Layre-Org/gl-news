@@ -41,7 +41,7 @@ import { AuthMiddleware } from 'src/middlewares/auth.middleware';
 })
 export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(IdMiddleware).forRoutes('user/:id', 'user/news/:id');
+    consumer.apply(IdMiddleware).forRoutes('user/:id');
     consumer
       .apply(AuthMiddleware)
       .exclude({ path: 'user', method: RequestMethod.POST })

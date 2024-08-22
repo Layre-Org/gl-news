@@ -19,6 +19,10 @@ export class UserService {
     return this.userModel.findOne({ _id });
   }
 
+  findByEmail(email: string) {
+    return this.userModel.findOne({ email });
+  }
+
   findForAuth(email: string) {
     return this.userModel.findOne({ email }).select('+password');
   }

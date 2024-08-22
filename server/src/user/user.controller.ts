@@ -28,17 +28,8 @@ export class UserController {
   }
 
   @Get(':id')
-  async getUser(@Param('id') id: string | Types.ObjectId, @Req() req: Request) {
-    if (!req['isAdmin']) {
-      throw new UnauthorizedException();
-    }
-
+  async getUser(@Param('id') id: string | Types.ObjectId) {
     return await this.userService.findOne(id);
-  }
-
-  @Get('news/:id')
-  async getNews(@Param('id') id: string | Types.ObjectId) {
-    return id;
   }
 
   @Post()
@@ -52,6 +43,14 @@ export class UserController {
     @Body() body: UpdateUserDto,
     @Req() req: Request,
   ) {
+    if (body.email) {
+      const emailDocs = await this.userService.findByEmail(body.email);
+
+      if (emailDocs) {
+        throw new BadRequestException('This email already exists');
+      }
+    }
+
     const user = this.userService.findOne(id);
 
     if (!user) {
@@ -98,7 +97,6 @@ export class UserController {
     }
 
     const userId: Types.ObjectId = (await user)._id;
-
     if (!userId) {
       throw new UnauthorizedException(
         "Couldn't verify the author's permission, try again",
