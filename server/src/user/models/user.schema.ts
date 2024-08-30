@@ -17,7 +17,7 @@ export class User {
   @Prop({ default: 'default' })
   avatar: string;
 
-  @Prop({ default: false })
+  @Prop({ default: true })
   isWriter: boolean;
 
   @Prop({ default: false })

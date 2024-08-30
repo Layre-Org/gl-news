@@ -31,6 +31,11 @@ export class NewsModule implements NestModule {
       );
     consumer
       .apply(AuthMiddleware)
-      .forRoutes('news', 'news/:id', 'news/get/:id', 'news/user/:id');
+      .exclude(
+        { path: 'news', method: RequestMethod.GET },
+        { path: 'news/:id', method: RequestMethod.GET },
+        { path: 'news/user/:id', method: RequestMethod.GET },
+      )
+      .forRoutes('news', 'news/:id');
   }
 }
